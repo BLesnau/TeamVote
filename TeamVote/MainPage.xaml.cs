@@ -1,25 +1,28 @@
-﻿namespace TeamVote;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+
+namespace TeamVote;
 
 public partial class MainPage : ContentPage
 {
-    int count = 0;
 
-    public MainPage()
-    {
-        InitializeComponent();
-    }
+   public MainViewModel ViewModel { get => (MainViewModel)BindingContext; }
 
-    private void OnCounterClicked(object sender, EventArgs e)
-    {
-        count++;
+   //int count = 0;
+   public MainPage()
+   {
+      BindingContext = new MainViewModel();
 
-        if (count == 1)
-            CounterBtn.Text = $"Clicked {count} time";
-        else
-            CounterBtn.Text = $"Clicked {count} times";
+#if DEBUG
+      ViewModel.IsDebug = true;
+#else
+      ViewModel.IsDebug = false;
+#endif
 
-        SemanticScreenReader.Announce(CounterBtn.Text);
-    }
+      InitializeComponent();
+   }
+
+   private void OnCounterClicked( object sender, EventArgs e )
+   {
+      ((MainViewModel)BindingContext).IsDebug = !ViewModel.IsDebug;
+   }
 }
-
-

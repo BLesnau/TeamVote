@@ -1,42 +1,138 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:teamvote="clr-namespace:TeamVote"
+             x:DataType="teamvote:MainViewModel"
              x:Class="TeamVote.MainPage">
 
-    <ScrollView>
-        <VerticalStackLayout
-            Spacing="25"
-            Padding="30,0"
-            VerticalOptions="Center">
+   <!--#region DEBUG-->
+   <ContentPage.Resources>
+      <teamvote:VoteData x:Key="u1v1"
+                         UserId="1"
+                         VoteValue="1" />
+      <teamvote:VoteData x:Key="u1v2"
+                         UserId="1"
+                         VoteValue="2" />
+      <teamvote:VoteData x:Key="u1v3"
+                         UserId="1"
+                         VoteValue="3" />
+      <teamvote:VoteData x:Key="u1v4"
+                         UserId="1"
+                         VoteValue="4" />
 
-            <Image
-                Source="dotnet_bot.png"
-                SemanticProperties.Description="Cute dot net bot waving hi to you!"
+      <teamvote:VoteData x:Key="u2v1"
+                         UserId="2"
+                         VoteValue="1" />
+      <teamvote:VoteData x:Key="u2v2"
+                         UserId="2"
+                         VoteValue="2" />
+      <teamvote:VoteData x:Key="u2v3"
+                         UserId="2"
+                         VoteValue="3" />
+      <teamvote:VoteData x:Key="u2v4"
+                         UserId="2"
+                         VoteValue="4" />
+
+      <teamvote:VoteData x:Key="u3v1"
+                         UserId="3"
+                         VoteValue="1" />
+      <teamvote:VoteData x:Key="u3v2"
+                         UserId="3"
+                         VoteValue="2" />
+      <teamvote:VoteData x:Key="u3v3"
+                         UserId="3"
+                         VoteValue="3" />
+      <teamvote:VoteData x:Key="u3v4"
+                         UserId="3"
+                         VoteValue="4" />
+   </ContentPage.Resources>
+   <!--#endregion-->
+   
+   <ScrollView>
+      <VerticalStackLayout Spacing="25"
+                           Padding="30,0"
+                           VerticalOptions="Center">
+
+         <Image Source="dotnet_bot.png"
                 HeightRequest="200"
                 HorizontalOptions="Center" />
 
-            <Label
-                Text="Hello, World!"
+         <Label Text="Hello, World!"
                 SemanticProperties.HeadingLevel="Level1"
                 FontSize="32"
                 HorizontalOptions="Center" />
 
-            <Label
-                Text="Welcome to .NET Multi-platform App UI"
+         <Label Text="Welcome to .NET Multi-platform App UI"
                 SemanticProperties.HeadingLevel="Level2"
                 SemanticProperties.Description="Welcome to dot net Multi platform App U I"
                 FontSize="18"
                 HorizontalOptions="Center" />
 
-            <Button
-                x:Name="CounterBtn"
-                Text="Click me"
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Center" />
+         <!--#region DEBUG-->
+         <Border StrokeThickness="5"
+                 IsVisible="{Binding IsDebug}">
+            <VerticalStackLayout Padding="10">
+               <Label Text="DEBUG"
+                      FontSize="30"
+                      Padding="10" />
+               <HorizontalStackLayout Padding="10"
+                                      Spacing="10">
+                  <Label Text="User 1:"
+                         VerticalTextAlignment="Center" />
+                  <Button Text="Vote 1"
+                          Command="{Binding VoteCommand}"
+                          CommandParameter="{x:StaticResource u1v1}">
+                  </Button>
+                  <Button Text="Vote 2"
+                          Command="{Binding VoteCommand}"
+                          CommandParameter="{x:StaticResource u1v2}" />
+                  <Button Text="Vote 3"
+                          Command="{Binding VoteCommand}"
+                          CommandParameter="{x:StaticResource u1v3}" />
+                  <Button Text="Vote 4"
+                          Command="{Binding VoteCommand}"
+                          CommandParameter="{x:StaticResource u1v4}" />
+               </HorizontalStackLayout>
+               <HorizontalStackLayout Padding="10"
+                                      Spacing="10">
+                  <Label Text="User 2:"
+                         VerticalTextAlignment="Center" />
+                  <Button Text="Vote 1"
+                          Command="{Binding VoteCommand}"
+                          CommandParameter="{x:StaticResource u2v1}" />
+                  <Button Text="Vote 2"
+                          Command="{Binding VoteCommand}"
+                          CommandParameter="{x:StaticResource u2v2}" />
+                  <Button Text="Vote 3"
+                          Command="{Binding VoteCommand}"
+                          CommandParameter="{x:StaticResource u2v3}" />
+                  <Button Text="Vote 4"
+                          Command="{Binding VoteCommand}"
+                          CommandParameter="{x:StaticResource u2v4}" />
+               </HorizontalStackLayout>
+               <HorizontalStackLayout Padding="10"
+                                      Spacing="10">
+                  <Label Text="User 3:"
+                         VerticalTextAlignment="Center" />
+                  <Button Text="Vote 1"
+                          Command="{Binding VoteCommand}"
+                          CommandParameter="{x:StaticResource u3v1}" />
+                  <Button Text="Vote 2"
+                          Command="{Binding VoteCommand}"
+                          CommandParameter="{x:StaticResource u3v2}" />
+                  <Button Text="Vote 4"
+                          Command="{Binding VoteCommand}"
+                          CommandParameter="{x:StaticResource u3v3}" />
+                  <Button Text="Vote 4"
+                          Command="{Binding VoteCommand}"
+                          CommandParameter="{x:StaticResource u3v4}" />
+               </HorizontalStackLayout>
+            </VerticalStackLayout>
+         </Border>
+         <!--#endregion-->
 
-        </VerticalStackLayout>
-    </ScrollView>
+      </VerticalStackLayout>
+   </ScrollView>
 
 </ContentPage>
 
