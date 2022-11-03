@@ -178,7 +178,7 @@
          <!--#region Vote Summary-->
          <Grid Grid.Row="1"
                Grid.Column="1"
-               RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+               RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
                ColumnDefinitions="*,*"
                RowSpacing="25"
                ColumnSpacing="25">
@@ -268,6 +268,25 @@
                    HorizontalTextAlignment="Start"
                    HorizontalOptions="Start" />
 
+            <!--Vote Mode-->
+            <Label Grid.Row="5"
+                   Grid.Column="0"
+                   WidthRequest="200"
+                   FontSize="Medium"
+                   TextDecorations="Underline"
+                   Text="Mode:"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="End"
+                   HorizontalOptions="End" />
+            <Label Grid.Row="5"
+                   Grid.Column="1"
+                   WidthRequest="200"
+                   FontSize="Medium"
+                   Text="{Binding VoteMode}"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="Start"
+                   HorizontalOptions="Start" />
+
          </Grid>
          <!--#endregion-->
 
@@ -287,8 +306,7 @@
                          VerticalTextAlignment="Center" />
                   <Button Text="Vote 1"
                           Command="{Binding VoteCommand}"
-                          CommandParameter="{x:StaticResource u1v1}">
-                  </Button>
+                          CommandParameter="{x:StaticResource u1v1}" />
                   <Button Text="Vote 2"
                           Command="{Binding VoteCommand}"
                           CommandParameter="{x:StaticResource u1v2}" />
@@ -326,7 +344,7 @@
                   <Button Text="Vote 2"
                           Command="{Binding VoteCommand}"
                           CommandParameter="{x:StaticResource u3v2}" />
-                  <Button Text="Vote 4"
+                  <Button Text="Vote 3"
                           Command="{Binding VoteCommand}"
                           CommandParameter="{x:StaticResource u3v3}" />
                   <Button Text="Vote 4"

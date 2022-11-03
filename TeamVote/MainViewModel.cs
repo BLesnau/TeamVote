@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui.Core.Extensions;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 
@@ -11,6 +12,11 @@ public partial class VoteData : ObservableObject
 
    [ObservableProperty]
    public int _voteValue;
+
+   public VoteData Clone()
+   {
+      return (VoteData)this.MemberwiseClone();
+   }
 }
 
 public partial class MainViewModel : ObservableObject
@@ -32,6 +38,9 @@ public partial class MainViewModel : ObservableObject
 
    [ObservableProperty]
    public double _voteMedian = 0;
+
+   [ObservableProperty]
+   public int _voteMode = 0;
 
    [ObservableProperty]
    public ObservableCollection<VoteData> _votes = new ObservableCollection<VoteData>();
@@ -59,13 +68,36 @@ public partial class MainViewModel : ObservableObject
       }
       else
       {
-         Votes.Add( vote );
+         Votes.Add( vote.Clone() );
       }
+
+      CalculateVotes();
    }
 
    [RelayCommand]
    public void NewVote()
    {
       Votes.Clear();
+      CalculateVotes();
+   }
+
+   private void CalculateVotes()
+   {
+      TeamMemberCount = Votes.Count();
+
+      if ( TeamMemberCount > 0 )
+      {
+         VoteSum = Votes.Sum( x => x.VoteValue );
+         VoteAverage = Math.Round( Votes.Average( x => x.VoteValue ), 2 );
+         VoteMedian = Math.Round( Votes.Median( x => x.VoteValue ), 2 );
+         VoteMode = Votes.ModeWithMaxTiebreaker( x => x.VoteValue );
+      }
+      else
+      {
+         VoteSum = 0;
+         VoteAverage = 0;
+         VoteMedian = 0;
+         VoteMode = 0;
+      }
    }
 }
