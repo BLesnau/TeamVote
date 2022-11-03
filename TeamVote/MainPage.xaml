@@ -66,8 +66,7 @@
                    HorizontalOptions="Center" />
             <Label Text="Welcome To TeamVote"
                    FontSize="Header"
-                   HorizontalOptions="Center"
-                   LineBreakMode="NoWrap" />
+                   HorizontalOptions="Center" />
 
             <Grid RowDefinitions="Auto,Auto"
                   ColumnDefinitions="100,200"
@@ -123,17 +122,10 @@
          <!--#region Vote Tally-->
          <Border Grid.Row="1"
                  Grid.Column="0"
-                 StrokeThickness="5"
-                 HorizontalOptions="Center"
-                 Padding="10"
-                 MinimumWidthRequest="300"
-                 MinimumHeightRequest="400">
+                 StrokeThickness="5">
             <ListView ItemsSource="{Binding Votes}"
                       Header="{Binding .}"
-                      MinimumWidthRequest="300"
                       MinimumHeightRequest="400"
-                      SeparatorColor="Orange"
-                      SeparatorVisibility="Default"
                       SelectionMode="None">
                <ListView.HeaderTemplate>
                   <DataTemplate>
@@ -142,12 +134,20 @@
                                Text="User"
                                FontSize="Medium"
                                FontAttributes="Bold"
-                               TextDecorations="Underline" />
+                               TextDecorations="Underline"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center" />
                         <Label Grid.Column="1"
                                FontSize="Medium"
                                Text="Vote"
                                FontAttributes="Bold"
-                               TextDecorations="Underline" />
+                               TextDecorations="Underline"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center" />
                      </Grid>
                   </DataTemplate>
                </ListView.HeaderTemplate>
@@ -156,15 +156,119 @@
                      <ViewCell>
                         <Grid ColumnDefinitions="*,*">
                            <Label Grid.Column="0"
-                                  Text="{Binding UserId}" />
+                                  Text="{Binding UserId}"
+                                  HorizontalOptions="Center"
+                                  VerticalOptions="Center"
+                                  HorizontalTextAlignment="Center"
+                                  VerticalTextAlignment="Center" />
                            <Label Grid.Column="1"
-                                  Text="{Binding VoteValue}" />
+                                  Text="{Binding VoteValue}"
+                                  HorizontalOptions="Center"
+                                  VerticalOptions="Center"
+                                  HorizontalTextAlignment="Center"
+                                  VerticalTextAlignment="Center" />
                         </Grid>
                      </ViewCell>
                   </DataTemplate>
                </ListView.ItemTemplate>
             </ListView>
          </Border>
+         <!--#endregion-->
+
+         <!--#region Vote Summary-->
+         <Grid Grid.Row="1"
+               Grid.Column="1"
+               RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+               ColumnDefinitions="*,*"
+               RowSpacing="25"
+               ColumnSpacing="25">
+
+            <Label Grid.Row="0"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2"
+                   Text="Vote Summary"
+                   FontSize="Header"
+                   VerticalTextAlignment="Center"
+                   HorizontalOptions="Center" />
+
+
+            <!--Team Member Count-->
+            <Label Grid.Row="1"
+                   Grid.Column="0"
+                   WidthRequest="200"
+                   FontSize="Medium"
+                   TextDecorations="Underline"
+                   Text="Team Members:"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="End"
+                   HorizontalOptions="End" />
+            <Label Grid.Row="1"
+                   Grid.Column="1"
+                   WidthRequest="200"
+                   FontSize="Medium"
+                   Text="{Binding TeamMemberCount}"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="Start"
+                   HorizontalOptions="Start" />
+
+            <!--Vote Sum-->
+            <Label Grid.Row="2"
+                   Grid.Column="0"
+                   WidthRequest="200"
+                   FontSize="Medium"
+                   TextDecorations="Underline"
+                   Text="Sum:"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="End"
+                   HorizontalOptions="End" />
+            <Label Grid.Row="2"
+                   Grid.Column="1"
+                   WidthRequest="200"
+                   FontSize="Medium"
+                   Text="{Binding VoteSum}"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="Start"
+                   HorizontalOptions="Start" />
+
+            <!--Vote Average-->
+            <Label Grid.Row="3"
+                   Grid.Column="0"
+                   WidthRequest="200"
+                   FontSize="Medium"
+                   TextDecorations="Underline"
+                   Text="Average:"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="End"
+                   HorizontalOptions="End" />
+            <Label Grid.Row="3"
+                   Grid.Column="1"
+                   WidthRequest="200"
+                   FontSize="Medium"
+                   Text="{Binding VoteAverage}"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="Start"
+                   HorizontalOptions="Start" />
+
+            <!--Vote Median-->
+            <Label Grid.Row="4"
+                   Grid.Column="0"
+                   WidthRequest="200"
+                   FontSize="Medium"
+                   TextDecorations="Underline"
+                   Text="Median:"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="End"
+                   HorizontalOptions="End" />
+            <Label Grid.Row="4"
+                   Grid.Column="1"
+                   WidthRequest="200"
+                   FontSize="Medium"
+                   Text="{Binding VoteMedian}"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="Start"
+                   HorizontalOptions="Start" />
+
+         </Grid>
          <!--#endregion-->
 
          <!--#region DEBUG-->

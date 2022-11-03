@@ -1,6 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-
-namespace TeamVote;
+﻿namespace TeamVote;
 
 public partial class MainPage : ContentPage
 {

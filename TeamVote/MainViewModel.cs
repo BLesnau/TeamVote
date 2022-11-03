@@ -22,6 +22,18 @@ public partial class MainViewModel : ObservableObject
    public string _teamId;
 
    [ObservableProperty]
+   public int _teamMemberCount = 0;
+
+   [ObservableProperty]
+   public int _voteSum = 0;
+
+   [ObservableProperty]
+   public double _voteAverage = 0;
+
+   [ObservableProperty]
+   public double _voteMedian = 0;
+
+   [ObservableProperty]
    public ObservableCollection<VoteData> _votes = new ObservableCollection<VoteData>();
 
    [ObservableProperty]
