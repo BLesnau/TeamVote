@@ -7,7 +7,6 @@ public partial class MainPage : ContentPage
 
    public MainViewModel ViewModel { get => (MainViewModel)BindingContext; }
 
-   //int count = 0;
    public MainPage()
    {
       BindingContext = new MainViewModel();
@@ -19,10 +18,5 @@ public partial class MainPage : ContentPage
 #endif
 
       InitializeComponent();
-   }
-
-   private void OnCounterClicked( object sender, EventArgs e )
-   {
-      ((MainViewModel)BindingContext).IsDebug = !ViewModel.IsDebug;
    }
 }
