@@ -16,10 +16,26 @@ public partial class VoteData : ObservableObject
 public partial class MainViewModel : ObservableObject
 {
    [ObservableProperty]
+   public string _userId;
+
+   [ObservableProperty]
+   public string _teamId;
+
+   [ObservableProperty]
    public ObservableCollection<VoteData> _votes = new ObservableCollection<VoteData>();
 
    [ObservableProperty]
    public bool _isDebug;
+
+   public MainViewModel()
+   {
+      var rand = new Random();
+      var teamNum = rand.Next( 1, 100000 );
+      var userNum = rand.Next( 1, 100000 );
+
+      TeamId = $"Team_{teamNum}";
+      UserId = $"User_{userNum}";
+   }
 
    [RelayCommand]
    public void Vote( VoteData vote )

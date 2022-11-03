@@ -55,6 +55,7 @@
             ColumnSpacing="25"
             Padding="25">
 
+         <!--#region Top UI-->
          <VerticalStackLayout Grid.Row="0"
                               Grid.Column="0"
                               Grid.ColumnSpan="2"
@@ -64,15 +65,62 @@
                    HeightRequest="100"
                    HorizontalOptions="Center" />
             <Label Text="Welcome To TeamVote"
-                   FontSize="Title"
+                   FontSize="Header"
                    HorizontalOptions="Center"
                    LineBreakMode="NoWrap" />
+
+            <Grid RowDefinitions="Auto,Auto"
+                  ColumnDefinitions="100,200"
+                  HorizontalOptions="Center"
+                  RowSpacing="10">
+
+               <!--#region Team Entry-->
+               <Label Grid.Row="0"
+                      Grid.Column="0"
+                      Text="Team ID:"
+                      FontSize="Default"
+                      HorizontalTextAlignment="End"
+                      VerticalTextAlignment="Center"
+                      Padding="0,0,25,0" />
+               <Border Grid.Row="0"
+                       Grid.Column="1"
+                       StrokeThickness="2">
+                  <Entry WidthRequest="200"
+                         FontSize="Default"
+                         Text="{Binding TeamId}"
+                         Placeholder="Enter a team ID"
+                         ReturnType="Done" />
+               </Border>
+               <!--#endregion-->
+
+               <!--#region User Entry-->
+               <Label Grid.Row="1"
+                      Grid.Column="0"
+                      Text="User ID:"
+                      FontSize="Default"
+                      HorizontalTextAlignment="End"
+                      VerticalTextAlignment="Center"
+                      Padding="0,0,25,0" />
+               <Border Grid.Row="1"
+                       Grid.Column="1"
+                       StrokeThickness="2">
+                  <Entry WidthRequest="200"
+                         FontSize="Default"
+                         Text="{Binding UserId}"
+                         Placeholder="Enter a user ID"
+                         ReturnType="Done" />
+               </Border>
+               <!--#endregion-->
+
+            </Grid>
+
             <Button Text="New Vote"
-                    FontSize="Medium"
                     HorizontalOptions="Center"
                     Command="{Binding NewVoteCommand}" />
          </VerticalStackLayout>
+         <!--#endregion-->
 
+         <!--#region Vote Tally-->
          <Border Grid.Row="1"
                  Grid.Column="0"
                  StrokeThickness="5"
@@ -117,6 +165,7 @@
                </ListView.ItemTemplate>
             </ListView>
          </Border>
+         <!--#endregion-->
 
          <!--#region DEBUG-->
          <Border Grid.Row="2"
@@ -126,7 +175,7 @@
                  IsVisible="{Binding IsDebug}">
             <VerticalStackLayout Padding="10">
                <Label Text="DEBUG"
-                      FontSize="30"
+                      FontSize="Large"
                       Padding="10" />
                <HorizontalStackLayout Padding="10"
                                       Spacing="10">
@@ -183,6 +232,7 @@
             </VerticalStackLayout>
          </Border>
          <!--#endregion-->
+
       </Grid>
    </ScrollView>
 
