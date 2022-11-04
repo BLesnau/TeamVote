@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Maui.Core.Extensions;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 
@@ -56,28 +55,44 @@ public partial class MainViewModel : ObservableObject
 
       TeamId = $"Team_{teamNum}";
       UserId = $"User_{userNum}";
+
+      App.ServerConnection.VoteReceived += VoteReceived;
    }
 
    [RelayCommand]
-   public void Vote( VoteData vote )
+   public void DebugVote( VoteData vote )
    {
-      var v = Votes.FirstOrDefault( x => x.UserId == vote.UserId );
-      if ( v != null )
-      {
-         v.VoteValue = vote.VoteValue;
-      }
-      else
-      {
-         Votes.Add( vote.Clone() );
-      }
+      VoteReceived( vote.UserId, vote.VoteValue );
+   }
 
-      CalculateVotes();
+   [RelayCommand]
+   public async void Vote( int voteVal )
+   {
+      await App.ServerConnection.SendVote( UserId, voteVal );
    }
 
    [RelayCommand]
    public void NewVote()
    {
       Votes.Clear();
+      CalculateVotes();
+   }
+
+   private async void VoteReceived( string userId, int voteVal )
+   {
+      var v = Votes.FirstOrDefault( x => x.UserId == userId );
+      if ( v != null )
+      {
+         v.VoteValue = voteVal;
+      }
+      else
+      {
+         await MainThread.InvokeOnMainThreadAsync( () =>
+         {
+            Votes.Add( new VoteData() { UserId = userId, VoteValue = voteVal } );
+         } );
+      }
+
       CalculateVotes();
    }
 

@@ -113,6 +113,36 @@
 
             </Grid>
 
+            <!--#region Vote Selection-->
+            <VerticalStackLayout HorizontalOptions="Center">
+               <Label Text="Vote"
+                      FontSize="Medium"
+                      HorizontalOptions="Center" />
+               <HorizontalStackLayout HorizontalOptions="Center">
+                  <Button Text="1"
+                          HorizontalOptions="Center"
+                          Command="{Binding VoteCommand}"
+                          CommandParameter="{x:Int32 1}" />
+                  <Button Text="2"
+                          HorizontalOptions="Center"
+                          Command="{Binding VoteCommand}"
+                          CommandParameter="{x:Int32 2}" />
+                  <Button Text="3"
+                          HorizontalOptions="Center"
+                          Command="{Binding VoteCommand}"
+                          CommandParameter="{x:Int32 3}" />
+                  <Button Text="4"
+                          HorizontalOptions="Center"
+                          Command="{Binding VoteCommand}"
+                          CommandParameter="{x:Int32 4}" />
+                  <Button Text="8"
+                          HorizontalOptions="Center"
+                          Command="{Binding VoteCommand}"
+                          CommandParameter="{x:Int32 8}" />
+               </HorizontalStackLayout>
+            </VerticalStackLayout>
+            <!--#endregion-->
+
             <Button Text="New Vote"
                     HorizontalOptions="Center"
                     Command="{Binding NewVoteCommand}" />
@@ -305,16 +335,16 @@
                   <Label Text="User 1:"
                          VerticalTextAlignment="Center" />
                   <Button Text="Vote 1"
-                          Command="{Binding VoteCommand}"
+                          Command="{Binding DebugVoteCommand}"
                           CommandParameter="{x:StaticResource u1v1}" />
                   <Button Text="Vote 2"
-                          Command="{Binding VoteCommand}"
+                          Command="{Binding DebugVoteCommand}"
                           CommandParameter="{x:StaticResource u1v2}" />
                   <Button Text="Vote 3"
-                          Command="{Binding VoteCommand}"
+                          Command="{Binding DebugVoteCommand}"
                           CommandParameter="{x:StaticResource u1v3}" />
                   <Button Text="Vote 4"
-                          Command="{Binding VoteCommand}"
+                          Command="{Binding DebugVoteCommand}"
                           CommandParameter="{x:StaticResource u1v4}" />
                </HorizontalStackLayout>
                <HorizontalStackLayout Padding="10"
@@ -322,16 +352,16 @@
                   <Label Text="User 2:"
                          VerticalTextAlignment="Center" />
                   <Button Text="Vote 1"
-                          Command="{Binding VoteCommand}"
+                          Command="{Binding DebugVoteCommand}"
                           CommandParameter="{x:StaticResource u2v1}" />
                   <Button Text="Vote 2"
-                          Command="{Binding VoteCommand}"
+                          Command="{Binding DebugVoteCommand}"
                           CommandParameter="{x:StaticResource u2v2}" />
                   <Button Text="Vote 3"
-                          Command="{Binding VoteCommand}"
+                          Command="{Binding DebugVoteCommand}"
                           CommandParameter="{x:StaticResource u2v3}" />
                   <Button Text="Vote 4"
-                          Command="{Binding VoteCommand}"
+                          Command="{Binding DebugVoteCommand}"
                           CommandParameter="{x:StaticResource u2v4}" />
                </HorizontalStackLayout>
                <HorizontalStackLayout Padding="10"
@@ -339,16 +369,16 @@
                   <Label Text="User 3:"
                          VerticalTextAlignment="Center" />
                   <Button Text="Vote 1"
-                          Command="{Binding VoteCommand}"
+                          Command="{Binding DebugVoteCommand}"
                           CommandParameter="{x:StaticResource u3v1}" />
                   <Button Text="Vote 2"
-                          Command="{Binding VoteCommand}"
+                          Command="{Binding DebugVoteCommand}"
                           CommandParameter="{x:StaticResource u3v2}" />
                   <Button Text="Vote 3"
-                          Command="{Binding VoteCommand}"
+                          Command="{Binding DebugVoteCommand}"
                           CommandParameter="{x:StaticResource u3v3}" />
                   <Button Text="Vote 4"
-                          Command="{Binding VoteCommand}"
+                          Command="{Binding DebugVoteCommand}"
                           CommandParameter="{x:StaticResource u3v4}" />
                </HorizontalStackLayout>
             </VerticalStackLayout>

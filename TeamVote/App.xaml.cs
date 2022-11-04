@@ -2,11 +2,15 @@
 
 public partial class App : Application
 {
-    public App()
-    {
-        InitializeComponent();
+   public static ServerConnection ServerConnection;
 
-        MainPage = new AppShell();
-    }
+   public App( IServiceProvider provider )
+   {
+      InitializeComponent();
+
+      ServerConnection = provider.GetService<ServerConnection>();
+
+      MainPage = new AppShell();
+   }
 }
 
