@@ -48,6 +48,42 @@ public partial class MainViewModel : ObservableObject
    public bool _isDebug;
 
    public MainViewModel()
+   {    
+      App.ServerConnection.VoteReceived += VoteReceived;
+   }
+
+   [RelayCommand]
+   public void DebugVote( VoteData vote )
+   {
+      VoteReceived( vote.UserId, vote.VoteValue );
+   }
+
+   [RelayCommand]
+   public async void Vote( int voteVal )
+   {
+      if(string.IsNullOrWhiteSpace(TeamId))
+      {
+         App.AlertService.Error("A Team ID must be provided.");
+         return;
+      }
+
+      if ( string.IsNullOrWhiteSpace( UserId ) )
+      {
+         App.AlertService.Error( "A User ID must be provided." );
+         return;
+      }
+
+      await App.ServerConnection.SendVote( UserId, voteVal );
+   }
+
+   [RelayCommand]
+   public void NewVote()
+   {
+      Votes.Clear();
+      CalculateVotes();
+   }
+
+   public void UIFocused()
    {
       var rand = new Random();
       var teamNum = rand.Next( 1, 100000 );
@@ -64,27 +100,6 @@ public partial class MainViewModel : ObservableObject
       {
          UserId = $"User_{userNum}";
       }
-
-      App.ServerConnection.VoteReceived += VoteReceived;
-   }
-
-   [RelayCommand]
-   public void DebugVote( VoteData vote )
-   {
-      VoteReceived( vote.UserId, vote.VoteValue );
-   }
-
-   [RelayCommand]
-   public async void Vote( int voteVal )
-   {
-      await App.ServerConnection.SendVote( UserId, voteVal );
-   }
-
-   [RelayCommand]
-   public void NewVote()
-   {
-      Votes.Clear();
-      CalculateVotes();
    }
 
    partial void OnTeamIdChanged( string value )
@@ -95,7 +110,6 @@ public partial class MainViewModel : ObservableObject
    partial void OnUserIdChanged( string value )
    {
       Preferences.Default.Set( "UserId", UserId );
-
    }
 
    private async void VoteReceived( string userId, int voteVal )

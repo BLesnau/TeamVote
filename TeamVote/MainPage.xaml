@@ -69,7 +69,7 @@
                    HorizontalOptions="Center" />
 
             <Grid RowDefinitions="Auto,Auto"
-                  ColumnDefinitions="100,200"
+                  ColumnDefinitions="100,200,100"
                   HorizontalOptions="Center"
                   RowSpacing="10">
 
@@ -84,11 +84,11 @@
                <Border Grid.Row="0"
                        Grid.Column="1"
                        StrokeThickness="2">
-                  <Entry WidthRequest="200"
+                  <Entry x:Name="teamEntry"
+                         WidthRequest="200"
                          FontSize="Default"
                          Text="{Binding TeamId}"
-                         Placeholder="Enter a team ID"
-                         ReturnType="Done" />
+                         Placeholder="Enter a team ID" />
                </Border>
                <!--#endregion-->
 
@@ -103,11 +103,11 @@
                <Border Grid.Row="1"
                        Grid.Column="1"
                        StrokeThickness="2">
-                  <Entry WidthRequest="200"
+                  <Entry x:Name="userEntry"
+                         WidthRequest="200"
                          FontSize="Default"
                          Text="{Binding UserId}"
-                         Placeholder="Enter a user ID"
-                         ReturnType="Done" />
+                         Placeholder="Enter a user ID" />
                </Border>
                <!--#endregion-->
 

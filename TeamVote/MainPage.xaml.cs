@@ -6,6 +6,8 @@ public partial class MainPage : ContentPage
 
    public MainPage()
    {
+      InitializeComponent();
+
       BindingContext = new MainViewModel();
 
 #if DEBUG
@@ -14,6 +16,9 @@ public partial class MainPage : ContentPage
       ViewModel.IsDebug = false;
 #endif
 
-      InitializeComponent();
+      this.Focused += ( sender, e ) =>
+      {
+         ViewModel.UIFocused();
+      };
    }
 }
