@@ -18,5 +18,20 @@ namespace TeamVote.Server
             return false;
          }
       }
+
+      public async Task<bool> NewVote()
+      {
+         try
+         {
+            Console.WriteLine( $"New vote message received" );
+            await Clients.All.SendAsync( "NewVoteReceived" );
+
+            return true;
+         }
+         catch
+         {
+            return false;
+         }
+      }
    }
 }

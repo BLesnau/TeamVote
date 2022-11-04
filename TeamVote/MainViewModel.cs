@@ -48,8 +48,9 @@ public partial class MainViewModel : ObservableObject
    public bool _isDebug;
 
    public MainViewModel()
-   {    
+   {
       App.ServerConnection.VoteReceived += VoteReceived;
+      App.ServerConnection.NewVoteReceived += NewVoteReceived;
    }
 
    [RelayCommand]
@@ -61,9 +62,9 @@ public partial class MainViewModel : ObservableObject
    [RelayCommand]
    public async void Vote( int voteVal )
    {
-      if(string.IsNullOrWhiteSpace(TeamId))
+      if ( string.IsNullOrWhiteSpace( TeamId ) )
       {
-         App.AlertService.Error("A Team ID must be provided.");
+         App.AlertService.Error( "A Team ID must be provided." );
          return;
       }
 
@@ -77,10 +78,9 @@ public partial class MainViewModel : ObservableObject
    }
 
    [RelayCommand]
-   public void NewVote()
+   public async void NewVote()
    {
-      Votes.Clear();
-      CalculateVotes();
+      await App.ServerConnection.NewVote();
    }
 
    public void UIFocused()
@@ -128,6 +128,15 @@ public partial class MainViewModel : ObservableObject
       }
 
       CalculateVotes();
+   }
+
+   private async void NewVoteReceived()
+   {
+      await MainThread.InvokeOnMainThreadAsync( () =>
+      {
+         Votes.Clear();
+         CalculateVotes();
+      } );   
    }
 
    private void CalculateVotes()

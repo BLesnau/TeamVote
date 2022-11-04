@@ -7,6 +7,9 @@ public class ServerConnection
    public delegate void VoteEventHandler( string userId, int voteVal );
    public event VoteEventHandler VoteReceived;
 
+   public delegate void NewVoteEventHandler();
+   public event NewVoteEventHandler NewVoteReceived;
+
    private readonly HubConnection _connection;
 
    public ServerConnection()
@@ -16,6 +19,7 @@ public class ServerConnection
         .Build();
 
       _connection.On<string, int>( "VoteReceived", OnVoteReceived );
+      _connection.On( "NewVoteReceived", OnNewVoteReceived );
 
       _connection.StartAsync();
    }
@@ -42,5 +46,29 @@ public class ServerConnection
    private void OnVoteReceived( string userId, int voteVal )
    {
       VoteReceived?.Invoke( userId, voteVal );
+   }
+
+   public async Task NewVote()
+   {
+      try
+      {
+         if ( _connection.State == HubConnectionState.Connected )
+         {
+            var response = await _connection.InvokeCoreAsync( "NewVote", typeof( bool ), new object[] { } );
+         }
+         else
+         {
+            App.AlertService.Error( "Connection to server could not be established. Close and try again in a few minutes." );
+         }
+      }
+      catch ( Exception ex )
+      {
+         App.AlertService.Error( $"Unexpected error occured: {ex.Message}" );
+      }
+   }
+
+   private void OnNewVoteReceived()
+   {
+      NewVoteReceived?.Invoke();
    }
 }
