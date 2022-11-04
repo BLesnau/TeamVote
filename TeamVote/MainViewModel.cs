@@ -53,8 +53,17 @@ public partial class MainViewModel : ObservableObject
       var teamNum = rand.Next( 1, 100000 );
       var userNum = rand.Next( 1, 100000 );
 
-      TeamId = $"Team_{teamNum}";
-      UserId = $"User_{userNum}";
+      TeamId = Preferences.Default.Get( "TeamId", string.Empty );
+      if ( string.IsNullOrWhiteSpace( TeamId ) )
+      {
+         TeamId = $"Team_{teamNum}";
+      }
+
+      UserId = Preferences.Default.Get( "UserId", string.Empty );
+      if ( string.IsNullOrWhiteSpace( UserId ) )
+      {
+         UserId = $"User_{userNum}";
+      }
 
       App.ServerConnection.VoteReceived += VoteReceived;
    }
@@ -76,6 +85,17 @@ public partial class MainViewModel : ObservableObject
    {
       Votes.Clear();
       CalculateVotes();
+   }
+
+   partial void OnTeamIdChanged( string value )
+   {
+      Preferences.Default.Set( "TeamId", TeamId );
+   }
+
+   partial void OnUserIdChanged( string value )
+   {
+      Preferences.Default.Set( "UserId", UserId );
+
    }
 
    private async void VoteReceived( string userId, int voteVal )
