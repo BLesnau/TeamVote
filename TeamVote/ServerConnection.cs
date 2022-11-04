@@ -30,10 +30,12 @@ public class ServerConnection
          }
          else
          {
+            App.AlertService.Alert( "Connection to server could not be established. Close and try again in a few minutes." );
          }
       }
-      catch
+      catch ( Exception ex )
       {
+         App.AlertService.Alert( $"Unexpected error occured: {ex.Message}" );
       }
    }
 
