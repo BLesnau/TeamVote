@@ -16,9 +16,21 @@ public partial class MainPage : ContentPage
       ViewModel.IsDebug = false;
 #endif
 
-      this.Focused += ( sender, e ) =>
-      {
-         ViewModel.UIFocused();
-      };
+#if MACCATALYST
+      this.Appearing += UIFocused;
+#else
+      this.Focused += UIFocused;
+#endif
+   }
+
+   private void UIFocused( object sender, EventArgs e )
+   {
+      ViewModel.UIFocused();
+
+#if MACCATALYST
+      this.Appearing -= UIFocused;
+#else
+      this.Focused -= UIFocused;
+#endif
    }
 }
