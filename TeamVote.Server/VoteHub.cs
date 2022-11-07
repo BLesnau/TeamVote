@@ -34,6 +34,21 @@ namespace TeamVote.Server
          }
       }
 
+      public async Task<bool> CheckUserIn( string teamId, string userId )
+      {
+         try
+         {
+            Console.WriteLine( $"'{userId}' is checking in for team '{teamId}'" );
+            await Clients.Group( teamId ).SendAsync( "UserCheckInReceived", userId );
+
+            return true;
+         }
+         catch
+         {
+            return false;
+         }
+      }
+
       public async Task<bool> SendVote( string teamId, string userId, int voteVal )
       {
          try

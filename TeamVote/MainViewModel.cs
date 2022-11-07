@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Xml.Linq;
 
 namespace TeamVote;
 
@@ -10,7 +11,18 @@ public partial class VoteData : ObservableObject
    public string _userId;
 
    [ObservableProperty]
-   public int _voteValue;
+   public string _voteDisplay;
+
+   private int _voteValue;
+   public int VoteValue
+   {
+      set
+      {
+         _voteValue = value;
+         VoteDisplay = _voteValue < 0 ? "?" : value.ToString();
+      }
+      get { return _voteValue; }
+   }
 
    public VoteData Clone()
    {
@@ -49,10 +61,12 @@ public partial class MainViewModel : ObservableObject
 
    public MainViewModel()
    {
+      App.ServerConnection.UserCheckInReceived += UserCheckInReceived;
       App.ServerConnection.VoteReceived += VoteReceived;
       App.ServerConnection.NewVoteReceived += NewVoteReceived;
    }
 
+   private bool _isInitialized = false;
    private bool _joinedTeam = false;
    private string _joinedTeamName = string.Empty;
 
@@ -84,7 +98,7 @@ public partial class MainViewModel : ObservableObject
       await App.ServerConnection.NewVote( TeamId );
    }
 
-   public void UIFocused()
+   public async void UIFocused()
    {
       var rand = new Random();
       var teamNum = rand.Next( 1, 100000 );
@@ -101,26 +115,47 @@ public partial class MainViewModel : ObservableObject
       {
          UserId = $"User_{userNum}";
       }
+
+      await LeaveTeam();
+      await JoinTeam();
+
+      _isInitialized = true;
    }
 
    async partial void OnTeamIdChanged( string value )
    {
       Preferences.Default.Set( "TeamId", TeamId );
 
-      if ( _joinedTeam )
+      if ( _isInitialized )
       {
-         await App.ServerConnection.LeaveTeam( _joinedTeamName, UserId );
-         _joinedTeam = false;
-         _joinedTeamName = string.Empty;
-         NewVoteReceived();
+         await LeaveTeam();
+         await JoinTeam();
       }
-
-      await JoinTeam();
    }
 
-   partial void OnUserIdChanged( string value )
+   async partial void OnUserIdChanged( string value )
    {
       Preferences.Default.Set( "UserId", UserId );
+
+      if ( _isInitialized )
+      {
+         await LeaveTeam();
+         await JoinTeam();
+      }
+   }
+
+   private async void UserCheckInReceived( string userId )
+   {
+      var v = Votes.FirstOrDefault( x => x.UserId == userId );
+      if ( v == null )
+      {
+         await MainThread.InvokeOnMainThreadAsync( () =>
+         {
+            Votes.Add( new VoteData() { UserId = userId, VoteValue = -1 } );
+         } );
+      }
+
+      CalculateVotes();
    }
 
    private async void VoteReceived( string userId, int voteVal )
@@ -148,18 +183,21 @@ public partial class MainViewModel : ObservableObject
          Votes.Clear();
          CalculateVotes();
       } );
+
+      await CheckIn();
    }
 
    private void CalculateVotes()
    {
-      TeamMemberCount = Votes.Count();
+      var votesToUse = Votes.Where( x => x.VoteValue >= 0 );
+      TeamMemberCount = votesToUse.Count();
 
       if ( TeamMemberCount > 0 )
       {
-         VoteSum = Votes.Sum( x => x.VoteValue );
-         VoteAverage = Math.Round( Votes.Average( x => x.VoteValue ), 2 );
-         VoteMedian = Math.Round( Votes.Median( x => x.VoteValue ), 2 );
-         VoteMode = Votes.ModeWithMaxTiebreaker( x => x.VoteValue );
+         VoteSum = votesToUse.Sum( x => x.VoteValue );
+         VoteAverage = Math.Round( votesToUse.Average( x => x.VoteValue ), 2 );
+         VoteMedian = Math.Round( votesToUse.Median( x => x.VoteValue ), 2 );
+         VoteMode = votesToUse.ModeWithMaxTiebreaker( x => x.VoteValue );
       }
       else
       {
@@ -196,6 +234,24 @@ public partial class MainViewModel : ObservableObject
          await App.ServerConnection.JoinTeam( TeamId, UserId );
          _joinedTeam = true;
          _joinedTeamName = TeamId;
+
+         await CheckIn();
       }
+   }
+
+   private async Task LeaveTeam()
+   {
+      if ( _joinedTeam )
+      {
+         await App.ServerConnection.LeaveTeam( _joinedTeamName, UserId );
+         _joinedTeam = false;
+         _joinedTeamName = string.Empty;
+         NewVoteReceived();
+      }
+   }
+
+   private async Task CheckIn()
+   {
+      await App.ServerConnection.CheckUserIn( TeamId, UserId );
    }
 }

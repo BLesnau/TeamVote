@@ -192,7 +192,7 @@
                                   HorizontalTextAlignment="Center"
                                   VerticalTextAlignment="Center" />
                            <Label Grid.Column="1"
-                                  Text="{Binding VoteValue}"
+                                  Text="{Binding VoteDisplay}"
                                   HorizontalOptions="Center"
                                   VerticalOptions="Center"
                                   HorizontalTextAlignment="Center"

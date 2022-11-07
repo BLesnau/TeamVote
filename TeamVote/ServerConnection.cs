@@ -5,6 +5,9 @@ namespace TeamVote;
 
 public class ServerConnection
 {
+   public delegate void UserCheckInEventHandler( string userId );
+   public event UserCheckInEventHandler UserCheckInReceived;
+
    public delegate void VoteEventHandler( string userId, int voteVal );
    public event VoteEventHandler VoteReceived;
 
@@ -26,6 +29,7 @@ public class ServerConnection
         .WithUrl( $"{serverUrl}/vote" )
         .Build();
 
+      _connection.On<string>( "UserCheckInReceived", OnUserCheckInReceived );
       _connection.On<string, int>( "VoteReceived", OnVoteReceived );
       _connection.On( "NewVoteReceived", OnNewVoteReceived );
 
@@ -68,6 +72,30 @@ public class ServerConnection
       {
          App.AlertService.Error( $"Unexpected error occured: {ex.Message}" );
       }
+   }
+
+   public async Task CheckUserIn( string teamId, string userId )
+   {
+      try
+      {
+         if ( _connection.State == HubConnectionState.Connected )
+         {
+            var response = await _connection.InvokeCoreAsync( "CheckUserIn", typeof( bool ), new object[] { teamId, userId } );
+         }
+         else
+         {
+            App.AlertService.Error( "Connection to server could not be established. Close and try again in a few minutes." );
+         }
+      }
+      catch ( Exception ex )
+      {
+         App.AlertService.Error( $"Unexpected error occured: {ex.Message}" );
+      }
+   }
+
+   private void OnUserCheckInReceived( string userId )
+   {
+      UserCheckInReceived?.Invoke( userId );
    }
 
    public async Task SendVote( string teamId, string userId, int voteVal )
