@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
+using static System.Net.WebRequestMethods;
 
 namespace TeamVote;
 
@@ -14,8 +15,15 @@ public class ServerConnection
 
    public ServerConnection()
    {
+      var serverUrl = "https://teamvoteserver.azurewebsites.net";
+      var args = Environment.GetCommandLineArgs();
+      if ( args != null && args.Any( x => x.Equals( "DEV", StringComparison.InvariantCultureIgnoreCase ) ) )
+      {
+         serverUrl = "http://10.14.144.234:5049";
+      }
+
       _connection = new HubConnectionBuilder()
-        .WithUrl( "http://10.14.144.234:5049/vote" )
+        .WithUrl( $"{serverUrl}/vote" )
         .Build();
 
       _connection.On<string, int>( "VoteReceived", OnVoteReceived );
