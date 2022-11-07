@@ -19,9 +19,28 @@ public partial class VoteData : ObservableObject
       set
       {
          _voteValue = value;
-         VoteDisplay = _voteValue < 0 ? "?" : value.ToString();
+         if ( _voteValue < 0 )
+         {
+            VoteDisplay = "<None>";
+         }
+         else
+         {
+            VoteDisplay = HideVotes ? "?" : value.ToString();
+         }
       }
       get { return _voteValue; }
+   }
+
+   private bool _hideVotes;
+   public bool HideVotes
+   {
+      get => _hideVotes;
+      set
+      {
+         _hideVotes = value;
+
+         VoteValue = VoteValue;
+      }
    }
 
    public VoteData Clone()
@@ -64,11 +83,13 @@ public partial class MainViewModel : ObservableObject
       App.ServerConnection.UserCheckInReceived += UserCheckInReceived;
       App.ServerConnection.VoteReceived += VoteReceived;
       App.ServerConnection.NewVoteReceived += NewVoteReceived;
+      App.ServerConnection.ShowVotesReceived += ShowVotesReceived;
    }
 
    private bool _isInitialized = false;
    private bool _joinedTeam = false;
    private string _joinedTeamName = string.Empty;
+   private bool _votesHidden = true;
 
    [RelayCommand]
    public void DebugVote( VoteData vote )
@@ -96,6 +117,17 @@ public partial class MainViewModel : ObservableObject
       }
 
       await App.ServerConnection.NewVote( TeamId );
+   }
+
+   [RelayCommand]
+   public async void ShowVotes()
+   {
+      if ( !(await CheckInput()) )
+      {
+         return;
+      }
+
+      await App.ServerConnection.ShowVotes( TeamId );
    }
 
    public async void UIFocused()
@@ -151,7 +183,7 @@ public partial class MainViewModel : ObservableObject
       {
          await MainThread.InvokeOnMainThreadAsync( () =>
          {
-            Votes.Add( new VoteData() { UserId = userId, VoteValue = -1 } );
+            Votes.Add( new VoteData() { UserId = userId, VoteValue = -1, HideVotes = _votesHidden } );
          } );
       }
 
@@ -169,7 +201,7 @@ public partial class MainViewModel : ObservableObject
       {
          await MainThread.InvokeOnMainThreadAsync( () =>
          {
-            Votes.Add( new VoteData() { UserId = userId, VoteValue = voteVal } );
+            Votes.Add( new VoteData() { UserId = userId, VoteValue = voteVal, HideVotes = _votesHidden } );
          } );
       }
 
@@ -185,11 +217,29 @@ public partial class MainViewModel : ObservableObject
       } );
 
       await CheckIn();
+
+      _votesHidden = true;
+   }
+
+   private async void ShowVotesReceived()
+   {
+      _votesHidden = false;
+      UpdateHiddenVotes();
+   }
+
+   private void UpdateHiddenVotes()
+   {
+      foreach ( var vote in Votes )
+      {
+         vote.HideVotes = _votesHidden;
+      }
+
+      CalculateVotes();
    }
 
    private void CalculateVotes()
    {
-      var votesToUse = Votes.Where( x => x.VoteValue >= 0 );
+      var votesToUse = Votes.Where( x => x.VoteValue >= 0 && !x.HideVotes );
       TeamMemberCount = votesToUse.Count();
 
       if ( TeamMemberCount > 0 )

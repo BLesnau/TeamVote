@@ -78,5 +78,20 @@ namespace TeamVote.Server
             return false;
          }
       }
+
+      public async Task<bool> ShowVotes( string teamId )
+      {
+         try
+         {
+            Console.WriteLine( $"Show votes message received for team '{teamId}'" );
+            await Clients.Group( teamId ).SendAsync( "ShowVotesReceived" );
+
+            return true;
+         }
+         catch
+         {
+            return false;
+         }
+      }
    }
 }

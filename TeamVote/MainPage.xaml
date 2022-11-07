@@ -143,9 +143,13 @@
             </VerticalStackLayout>
             <!--#endregion-->
 
-            <Button Text="New Vote"
-                    HorizontalOptions="Center"
-                    Command="{Binding NewVoteCommand}" />
+            <HorizontalStackLayout Spacing="25"
+                                   HorizontalOptions="Center">
+               <Button Text="New Vote"
+                       Command="{Binding NewVoteCommand}" />
+               <Button Text="Show Votes"                   
+                       Command="{Binding ShowVotesCommand}" />
+            </HorizontalStackLayout>
          </VerticalStackLayout>
          <!--#endregion-->
 
