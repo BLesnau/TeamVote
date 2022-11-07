@@ -32,13 +32,51 @@ public class ServerConnection
       _connection.StartAsync();
    }
 
-   public async Task SendVote( string userId, int voteVal )
+   public async Task JoinTeam( string teamId, string userId )
    {
       try
       {
          if ( _connection.State == HubConnectionState.Connected )
          {
-            var response = await _connection.InvokeCoreAsync( "SendVote", typeof( bool ), new object[] { userId, voteVal } );
+            var response = await _connection.InvokeCoreAsync( "JoinTeam", typeof( bool ), new object[] { teamId, userId } );
+         }
+         else
+         {
+            App.AlertService.Error( "Connection to server could not be established. Close and try again in a few minutes." );
+         }
+      }
+      catch ( Exception ex )
+      {
+         App.AlertService.Error( $"Unexpected error occured: {ex.Message}" );
+      }
+   }
+
+   public async Task LeaveTeam( string teamId, string userId )
+   {
+      try
+      {
+         if ( _connection.State == HubConnectionState.Connected )
+         {
+            var response = await _connection.InvokeCoreAsync( "LeaveTeam", typeof( bool ), new object[] { teamId, userId } );
+         }
+         else
+         {
+            App.AlertService.Error( "Connection to server could not be established. Close and try again in a few minutes." );
+         }
+      }
+      catch ( Exception ex )
+      {
+         App.AlertService.Error( $"Unexpected error occured: {ex.Message}" );
+      }
+   }
+
+   public async Task SendVote( string teamId, string userId, int voteVal )
+   {
+      try
+      {
+         if ( _connection.State == HubConnectionState.Connected )
+         {
+            var response = await _connection.InvokeCoreAsync( "SendVote", typeof( bool ), new object[] { teamId, userId, voteVal } );
          }
          else
          {
@@ -56,13 +94,13 @@ public class ServerConnection
       VoteReceived?.Invoke( userId, voteVal );
    }
 
-   public async Task NewVote()
+   public async Task NewVote( string teamId )
    {
       try
       {
          if ( _connection.State == HubConnectionState.Connected )
          {
-            var response = await _connection.InvokeCoreAsync( "NewVote", typeof( bool ), new object[] { } );
+            var response = await _connection.InvokeCoreAsync( "NewVote", typeof( bool ), new object[] { teamId } );
          }
          else
          {

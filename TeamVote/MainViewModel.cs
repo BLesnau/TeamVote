@@ -53,6 +53,9 @@ public partial class MainViewModel : ObservableObject
       App.ServerConnection.NewVoteReceived += NewVoteReceived;
    }
 
+   private bool _joinedTeam = false;
+   private string _joinedTeamName = string.Empty;
+
    [RelayCommand]
    public void DebugVote( VoteData vote )
    {
@@ -62,25 +65,23 @@ public partial class MainViewModel : ObservableObject
    [RelayCommand]
    public async void Vote( int voteVal )
    {
-      if ( string.IsNullOrWhiteSpace( TeamId ) )
+      if ( !(await CheckInput()) )
       {
-         App.AlertService.Error( "A Team ID must be provided." );
          return;
       }
 
-      if ( string.IsNullOrWhiteSpace( UserId ) )
-      {
-         App.AlertService.Error( "A User ID must be provided." );
-         return;
-      }
-
-      await App.ServerConnection.SendVote( UserId, voteVal );
+      await App.ServerConnection.SendVote( TeamId, UserId, voteVal );
    }
 
    [RelayCommand]
    public async void NewVote()
    {
-      await App.ServerConnection.NewVote();
+      if ( !(await CheckInput()) )
+      {
+         return;
+      }
+
+      await App.ServerConnection.NewVote( TeamId );
    }
 
    public void UIFocused()
@@ -102,9 +103,19 @@ public partial class MainViewModel : ObservableObject
       }
    }
 
-   partial void OnTeamIdChanged( string value )
+   async partial void OnTeamIdChanged( string value )
    {
       Preferences.Default.Set( "TeamId", TeamId );
+
+      if ( _joinedTeam )
+      {
+         await App.ServerConnection.LeaveTeam( _joinedTeamName, UserId );
+         _joinedTeam = false;
+         _joinedTeamName = string.Empty;
+         NewVoteReceived();
+      }
+
+      await JoinTeam();
    }
 
    partial void OnUserIdChanged( string value )
@@ -136,7 +147,7 @@ public partial class MainViewModel : ObservableObject
       {
          Votes.Clear();
          CalculateVotes();
-      } );   
+      } );
    }
 
    private void CalculateVotes()
@@ -156,6 +167,35 @@ public partial class MainViewModel : ObservableObject
          VoteAverage = 0;
          VoteMedian = 0;
          VoteMode = 0;
+      }
+   }
+
+   private async Task<bool> CheckInput()
+   {
+      if ( string.IsNullOrWhiteSpace( TeamId ) )
+      {
+         App.AlertService.Error( "A Team ID must be provided." );
+         return false;
+      }
+
+      if ( string.IsNullOrWhiteSpace( UserId ) )
+      {
+         App.AlertService.Error( "A User ID must be provided." );
+         return false;
+      }
+
+      await JoinTeam();
+
+      return true;
+   }
+
+   private async Task JoinTeam()
+   {
+      if ( !_joinedTeam )
+      {
+         await App.ServerConnection.JoinTeam( TeamId, UserId );
+         _joinedTeam = true;
+         _joinedTeamName = TeamId;
       }
    }
 }
