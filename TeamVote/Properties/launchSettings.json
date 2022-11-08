@@ -1,8 +1,14 @@
 ﻿{
-  "profiles": {
-    "Windows Machine": {
-      "commandName": "MsixPackage",
-      "nativeDebugging": false
-    }
-  }
+   "profiles": {
+      "Windows LIVE": {
+         "commandName": "MsixPackage",
+         "nativeDebugging": false,
+         "commandLineArgs": "LIVE"
+      },
+      "Windows DEV": {
+         "commandName": "MsixPackage",
+         "nativeDebugging": false,
+         "commandLineArgs": "DEV"
+      }
+   }
 }

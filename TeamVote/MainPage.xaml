@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:teamvote="clr-namespace:TeamVote"
@@ -47,50 +47,310 @@
                          VoteValue="4" />
    </ContentPage.Resources>
    <!--#endregion-->
-   
+
    <ScrollView>
-      <VerticalStackLayout Spacing="25"
-                           Padding="30,0"
-                           VerticalOptions="Center">
+      <Grid RowDefinitions="{OnIdiom Desktop='Auto,Auto,Auto', Phone='Auto,Auto,Auto,Auto'}"
+            ColumnDefinitions="*,*"
+            RowSpacing="25"
+            ColumnSpacing="25"
+            Padding="25">
 
-         <Image Source="dotnet_bot.png"
-                HeightRequest="200"
-                HorizontalOptions="Center" />
+         <!--#region Top UI-->
+         <VerticalStackLayout Grid.Row="0"
+                              Grid.Column="0"
+                              Grid.ColumnSpan="2"
+                              Spacing="25">
+            <Image Source="dotnet_bot.png"
+                   WidthRequest="100"
+                   HeightRequest="100"
+                   HorizontalOptions="Center" />
+            <Label Text="Welcome To TeamVote"
+                   FontSize="Header"
+                   HorizontalOptions="Center" />
 
-         <Label Text="Hello, World!"
-                SemanticProperties.HeadingLevel="Level1"
-                FontSize="32"
-                HorizontalOptions="Center" />
+            <Grid RowDefinitions="Auto,Auto"
+                  ColumnDefinitions="100,200"
+                  HorizontalOptions="Center"
+                  RowSpacing="10">
 
-         <Label Text="Welcome to .NET Multi-platform App UI"
-                SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
-                FontSize="18"
-                HorizontalOptions="Center" />
+               <!--#region Team Entry-->
+               <Label Grid.Row="0"
+                      Grid.Column="0"
+                      Text="Team ID:"
+                      FontSize="Default"
+                      HorizontalTextAlignment="End"
+                      VerticalTextAlignment="Center"
+                      Padding="0,0,25,0" />
+               <Border Grid.Row="0"
+                       Grid.Column="1"
+                       StrokeThickness="2">
+                  <Entry x:Name="teamEntry"
+                         WidthRequest="200"
+                         FontSize="Default"
+                         Text="{Binding TeamId}"
+                         Placeholder="Enter a team ID" />
+               </Border>
+               <!--#endregion-->
+
+               <!--#region User Entry-->
+               <Label Grid.Row="1"
+                      Grid.Column="0"
+                      Text="User ID:"
+                      FontSize="Default"
+                      HorizontalTextAlignment="End"
+                      VerticalTextAlignment="Center"
+                      Padding="0,0,25,0" />
+               <Border Grid.Row="1"
+                       Grid.Column="1"
+                       StrokeThickness="2">
+                  <Entry x:Name="userEntry"
+                         WidthRequest="200"
+                         FontSize="Default"
+                         Text="{Binding UserId}"
+                         Placeholder="Enter a user ID" />
+               </Border>
+               <!--#endregion-->
+
+            </Grid>
+
+            <!--#region Vote Selection-->
+            <VerticalStackLayout HorizontalOptions="Center">
+               <Label Text="Vote"
+                      FontSize="Medium"
+                      HorizontalOptions="Center" />
+               <HorizontalStackLayout HorizontalOptions="Center" Spacing="2">
+                  <Button Text="1"
+                          HorizontalOptions="Center"
+                          Command="{Binding VoteCommand}"
+                          CommandParameter="{x:Int32 1}" />
+                  <Button Text="2"
+                          HorizontalOptions="Center"
+                          Command="{Binding VoteCommand}"
+                          CommandParameter="{x:Int32 2}" />
+                  <Button Text="3"
+                          HorizontalOptions="Center"
+                          Command="{Binding VoteCommand}"
+                          CommandParameter="{x:Int32 3}" />
+                  <Button Text="4"
+                          HorizontalOptions="Center"
+                          Command="{Binding VoteCommand}"
+                          CommandParameter="{x:Int32 4}" />
+                  <Button Text="8"
+                          HorizontalOptions="Center"
+                          Command="{Binding VoteCommand}"
+                          CommandParameter="{x:Int32 8}" />
+               </HorizontalStackLayout>
+            </VerticalStackLayout>
+            <!--#endregion-->
+
+            <HorizontalStackLayout Spacing="25"
+                                   HorizontalOptions="Center">
+               <Button Text="New Vote"
+                       Command="{Binding NewVoteCommand}" />
+               <Button Text="Show Votes"                   
+                       Command="{Binding ShowVotesCommand}" />
+            </HorizontalStackLayout>
+         </VerticalStackLayout>
+         <!--#endregion-->
+
+         <!--#region Vote Tally-->
+         <Border Grid.Row="1"
+                 Grid.Column="0"
+                 Grid.ColumnSpan="{OnIdiom Desktop=1, Phone=2}"
+                 StrokeThickness="5">
+            <ListView ItemsSource="{Binding Votes}"
+                      Header="{Binding .}"
+                      MinimumHeightRequest="400"
+                      SelectionMode="None">
+               <ListView.HeaderTemplate>
+                  <DataTemplate>
+                     <Grid ColumnDefinitions="*,*">
+                        <Label Grid.Column="0"
+                               Text="User"
+                               FontSize="Medium"
+                               FontAttributes="Bold"
+                               TextDecorations="Underline"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center" />
+                        <Label Grid.Column="1"
+                               FontSize="Medium"
+                               Text="Vote"
+                               FontAttributes="Bold"
+                               TextDecorations="Underline"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center" />
+                     </Grid>
+                  </DataTemplate>
+               </ListView.HeaderTemplate>
+               <ListView.ItemTemplate>
+                  <DataTemplate x:DataType="teamvote:VoteData">
+                     <ViewCell>
+                        <Grid ColumnDefinitions="*,*">
+                           <Label Grid.Column="0"
+                                  Text="{Binding UserId}"
+                                  HorizontalOptions="Center"
+                                  VerticalOptions="Center"
+                                  HorizontalTextAlignment="Center"
+                                  VerticalTextAlignment="Center" />
+                           <Label Grid.Column="1"
+                                  Text="{Binding VoteDisplay}"
+                                  HorizontalOptions="Center"
+                                  VerticalOptions="Center"
+                                  HorizontalTextAlignment="Center"
+                                  VerticalTextAlignment="Center" />
+                        </Grid>
+                     </ViewCell>
+                  </DataTemplate>
+               </ListView.ItemTemplate>
+            </ListView>
+         </Border>
+         <!--#endregion-->
+
+         <!--#region Vote Summary-->
+         <Grid Grid.Row="{OnIdiom Desktop=1, Phone=2}"
+               Grid.Column="{OnIdiom Desktop=1, Phone=0}"
+               Grid.ColumnSpan="{OnIdiom Desktop=1, Phone=2}"
+               RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
+               ColumnDefinitions="*,*"
+               RowSpacing="25"
+               ColumnSpacing="25">
+
+            <Label Grid.Row="0"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2"
+                   Text="Vote Summary"
+                   FontSize="Header"
+                   VerticalTextAlignment="Center"
+                   HorizontalOptions="Center" />
+
+
+            <!--Team Member Count-->
+            <Label Grid.Row="1"
+                   Grid.Column="0"
+                   WidthRequest="200"
+                   FontSize="Medium"
+                   TextDecorations="Underline"
+                   Text="Team Members:"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="End"
+                   HorizontalOptions="End" />
+            <Label Grid.Row="1"
+                   Grid.Column="1"
+                   WidthRequest="200"
+                   FontSize="Medium"
+                   Text="{Binding TeamMemberCount}"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="Start"
+                   HorizontalOptions="Start" />
+
+            <!--Vote Sum-->
+            <Label Grid.Row="2"
+                   Grid.Column="0"
+                   WidthRequest="200"
+                   FontSize="Medium"
+                   TextDecorations="Underline"
+                   Text="Sum:"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="End"
+                   HorizontalOptions="End" />
+            <Label Grid.Row="2"
+                   Grid.Column="1"
+                   WidthRequest="200"
+                   FontSize="Medium"
+                   Text="{Binding VoteSum}"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="Start"
+                   HorizontalOptions="Start" />
+
+            <!--Vote Average-->
+            <Label Grid.Row="3"
+                   Grid.Column="0"
+                   WidthRequest="200"
+                   FontSize="Medium"
+                   TextDecorations="Underline"
+                   Text="Average:"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="End"
+                   HorizontalOptions="End" />
+            <Label Grid.Row="3"
+                   Grid.Column="1"
+                   WidthRequest="200"
+                   FontSize="Medium"
+                   Text="{Binding VoteAverage}"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="Start"
+                   HorizontalOptions="Start" />
+
+            <!--Vote Median-->
+            <Label Grid.Row="4"
+                   Grid.Column="0"
+                   WidthRequest="200"
+                   FontSize="Medium"
+                   TextDecorations="Underline"
+                   Text="Median:"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="End"
+                   HorizontalOptions="End" />
+            <Label Grid.Row="4"
+                   Grid.Column="1"
+                   WidthRequest="200"
+                   FontSize="Medium"
+                   Text="{Binding VoteMedian}"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="Start"
+                   HorizontalOptions="Start" />
+
+            <!--Vote Mode-->
+            <Label Grid.Row="5"
+                   Grid.Column="0"
+                   WidthRequest="200"
+                   FontSize="Medium"
+                   TextDecorations="Underline"
+                   Text="Mode:"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="End"
+                   HorizontalOptions="End" />
+            <Label Grid.Row="5"
+                   Grid.Column="1"
+                   WidthRequest="200"
+                   FontSize="Medium"
+                   Text="{Binding VoteMode}"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="Start"
+                   HorizontalOptions="Start" />
+
+         </Grid>
+         <!--#endregion-->
 
          <!--#region DEBUG-->
-         <Border StrokeThickness="5"
+         <Border Grid.Row="{OnIdiom Desktop=2, Phone=3}"
+                 Grid.Column="0"
+                 Grid.ColumnSpan="2"
+                 StrokeThickness="5"
                  IsVisible="{Binding IsDebug}">
             <VerticalStackLayout Padding="10">
                <Label Text="DEBUG"
-                      FontSize="30"
+                      FontSize="Large"
                       Padding="10" />
                <HorizontalStackLayout Padding="10"
                                       Spacing="10">
                   <Label Text="User 1:"
                          VerticalTextAlignment="Center" />
                   <Button Text="Vote 1"
-                          Command="{Binding VoteCommand}"
-                          CommandParameter="{x:StaticResource u1v1}">
-                  </Button>
+                          Command="{Binding DebugVoteCommand}"
+                          CommandParameter="{x:StaticResource u1v1}" />
                   <Button Text="Vote 2"
-                          Command="{Binding VoteCommand}"
+                          Command="{Binding DebugVoteCommand}"
                           CommandParameter="{x:StaticResource u1v2}" />
                   <Button Text="Vote 3"
-                          Command="{Binding VoteCommand}"
+                          Command="{Binding DebugVoteCommand}"
                           CommandParameter="{x:StaticResource u1v3}" />
                   <Button Text="Vote 4"
-                          Command="{Binding VoteCommand}"
+                          Command="{Binding DebugVoteCommand}"
                           CommandParameter="{x:StaticResource u1v4}" />
                </HorizontalStackLayout>
                <HorizontalStackLayout Padding="10"
@@ -98,16 +358,16 @@
                   <Label Text="User 2:"
                          VerticalTextAlignment="Center" />
                   <Button Text="Vote 1"
-                          Command="{Binding VoteCommand}"
+                          Command="{Binding DebugVoteCommand}"
                           CommandParameter="{x:StaticResource u2v1}" />
                   <Button Text="Vote 2"
-                          Command="{Binding VoteCommand}"
+                          Command="{Binding DebugVoteCommand}"
                           CommandParameter="{x:StaticResource u2v2}" />
                   <Button Text="Vote 3"
-                          Command="{Binding VoteCommand}"
+                          Command="{Binding DebugVoteCommand}"
                           CommandParameter="{x:StaticResource u2v3}" />
                   <Button Text="Vote 4"
-                          Command="{Binding VoteCommand}"
+                          Command="{Binding DebugVoteCommand}"
                           CommandParameter="{x:StaticResource u2v4}" />
                </HorizontalStackLayout>
                <HorizontalStackLayout Padding="10"
@@ -115,23 +375,23 @@
                   <Label Text="User 3:"
                          VerticalTextAlignment="Center" />
                   <Button Text="Vote 1"
-                          Command="{Binding VoteCommand}"
+                          Command="{Binding DebugVoteCommand}"
                           CommandParameter="{x:StaticResource u3v1}" />
                   <Button Text="Vote 2"
-                          Command="{Binding VoteCommand}"
+                          Command="{Binding DebugVoteCommand}"
                           CommandParameter="{x:StaticResource u3v2}" />
-                  <Button Text="Vote 4"
-                          Command="{Binding VoteCommand}"
+                  <Button Text="Vote 3"
+                          Command="{Binding DebugVoteCommand}"
                           CommandParameter="{x:StaticResource u3v3}" />
                   <Button Text="Vote 4"
-                          Command="{Binding VoteCommand}"
+                          Command="{Binding DebugVoteCommand}"
                           CommandParameter="{x:StaticResource u3v4}" />
                </HorizontalStackLayout>
             </VerticalStackLayout>
          </Border>
          <!--#endregion-->
 
-      </VerticalStackLayout>
+      </Grid>
    </ScrollView>
 
 </ContentPage>
