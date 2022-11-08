@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:teamvote="clr-namespace:TeamVote"
@@ -49,7 +49,7 @@
    <!--#endregion-->
 
    <ScrollView>
-      <Grid RowDefinitions="Auto,Auto,Auto"
+      <Grid RowDefinitions="{OnIdiom Desktop='Auto,Auto,Auto', Phone='Auto,Auto,Auto,Auto'}"
             ColumnDefinitions="*,*"
             RowSpacing="25"
             ColumnSpacing="25"
@@ -69,7 +69,7 @@
                    HorizontalOptions="Center" />
 
             <Grid RowDefinitions="Auto,Auto"
-                  ColumnDefinitions="100,200,100"
+                  ColumnDefinitions="100,200"
                   HorizontalOptions="Center"
                   RowSpacing="10">
 
@@ -118,7 +118,7 @@
                <Label Text="Vote"
                       FontSize="Medium"
                       HorizontalOptions="Center" />
-               <HorizontalStackLayout HorizontalOptions="Center">
+               <HorizontalStackLayout HorizontalOptions="Center" Spacing="2">
                   <Button Text="1"
                           HorizontalOptions="Center"
                           Command="{Binding VoteCommand}"
@@ -156,6 +156,7 @@
          <!--#region Vote Tally-->
          <Border Grid.Row="1"
                  Grid.Column="0"
+                 Grid.ColumnSpan="{OnIdiom Desktop=1, Phone=2}"
                  StrokeThickness="5">
             <ListView ItemsSource="{Binding Votes}"
                       Header="{Binding .}"
@@ -210,8 +211,9 @@
          <!--#endregion-->
 
          <!--#region Vote Summary-->
-         <Grid Grid.Row="1"
-               Grid.Column="1"
+         <Grid Grid.Row="{OnIdiom Desktop=1, Phone=2}"
+               Grid.Column="{OnIdiom Desktop=1, Phone=0}"
+               Grid.ColumnSpan="{OnIdiom Desktop=1, Phone=2}"
                RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
                ColumnDefinitions="*,*"
                RowSpacing="25"
@@ -325,7 +327,7 @@
          <!--#endregion-->
 
          <!--#region DEBUG-->
-         <Border Grid.Row="2"
+         <Border Grid.Row="{OnIdiom Desktop=2, Phone=3}"
                  Grid.Column="0"
                  Grid.ColumnSpan="2"
                  StrokeThickness="5"
