@@ -11,7 +11,8 @@ public partial class MainPage : ContentPage
       BindingContext = new MainViewModel();
 
 #if DEBUG
-      ViewModel.IsDebug = true;
+      //ViewModel.IsDebug = true; // Uncomment to show debug UI
+      ViewModel.IsDebug = false; // Uncomment to always hide debug UI
 #else
       ViewModel.IsDebug = false;
 #endif
