@@ -17,10 +17,16 @@ public partial class MainPage : ContentPage
       ViewModel.IsDebug = false;
 #endif
 
-#if MACCATALYST
-      this.Appearing += UIFocused;
-#else
+//#if MACCATALYST
+//      this.Appearing += UIFocused;
+//#else
+//      this.Focused += UIFocused;
+//#endif
+
+#if WINDOWS
       this.Focused += UIFocused;
+#else
+      this.Appearing += UIFocused;
 #endif
    }
 
@@ -28,10 +34,10 @@ public partial class MainPage : ContentPage
    {
       ViewModel.UIFocused();
 
-#if MACCATALYST
-      this.Appearing -= UIFocused;
-#else
+#if WINDOWS
       this.Focused -= UIFocused;
+#else
+      this.Appearing -= UIFocused;
 #endif
    }
 }
