@@ -2,47 +2,48 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:teamvote="clr-namespace:TeamVote"
+             xmlns:common="clr-namespace:TeamVoteCommon;assembly=TeamVoteCommon"
              x:DataType="teamvote:MainViewModel"
              x:Class="TeamVote.MainPage">
 
    <!--#region DEBUG-->
    <ContentPage.Resources>
-      <teamvote:VoteData x:Key="u1v1"
+      <common:VoteData x:Key="u1v1"
                          UserId="1"
                          VoteValue="1" />
-      <teamvote:VoteData x:Key="u1v2"
+      <common:VoteData x:Key="u1v2"
                          UserId="1"
                          VoteValue="2" />
-      <teamvote:VoteData x:Key="u1v3"
+      <common:VoteData x:Key="u1v3"
                          UserId="1"
                          VoteValue="3" />
-      <teamvote:VoteData x:Key="u1v4"
+      <common:VoteData x:Key="u1v4"
                          UserId="1"
                          VoteValue="4" />
 
-      <teamvote:VoteData x:Key="u2v1"
+      <common:VoteData x:Key="u2v1"
                          UserId="2"
                          VoteValue="1" />
-      <teamvote:VoteData x:Key="u2v2"
+      <common:VoteData x:Key="u2v2"
                          UserId="2"
                          VoteValue="2" />
-      <teamvote:VoteData x:Key="u2v3"
+      <common:VoteData x:Key="u2v3"
                          UserId="2"
                          VoteValue="3" />
-      <teamvote:VoteData x:Key="u2v4"
+      <common:VoteData x:Key="u2v4"
                          UserId="2"
                          VoteValue="4" />
 
-      <teamvote:VoteData x:Key="u3v1"
+      <common:VoteData x:Key="u3v1"
                          UserId="3"
                          VoteValue="1" />
-      <teamvote:VoteData x:Key="u3v2"
+      <common:VoteData x:Key="u3v2"
                          UserId="3"
                          VoteValue="2" />
-      <teamvote:VoteData x:Key="u3v3"
+      <common:VoteData x:Key="u3v3"
                          UserId="3"
                          VoteValue="3" />
-      <teamvote:VoteData x:Key="u3v4"
+      <common:VoteData x:Key="u3v4"
                          UserId="3"
                          VoteValue="4" />
    </ContentPage.Resources>
@@ -187,7 +188,7 @@
                   </DataTemplate>
                </ListView.HeaderTemplate>
                <ListView.ItemTemplate>
-                  <DataTemplate x:DataType="teamvote:VoteData">
+                  <DataTemplate x:DataType="common:VoteData">
                      <ViewCell>
                         <Grid ColumnDefinitions="*,*">
                            <Label Grid.Column="0"
