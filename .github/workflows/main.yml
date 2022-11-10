@@ -22,6 +22,10 @@ jobs:
             - name: copy index.html to 404.html
               run: cp release/wwwroot/index.html release/wwwroot/404.html
 
+            # changes the base-tag in index.html from '/' to 'TeamVote' to match GitHub Pages repository subdirectory
+            - name: Change base-tag in index.html from / to TeamVote
+              run: sed -i 's/<base href="\/" \/>/<base href="\/TeamVote\/" \/>/g' release/wwwroot/index.html
+
             - name: Add .nojekyll file
               run: touch release/wwwroot/.nojekyll
 
@@ -31,9 +35,5 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   BRANCH: gh-pages
                   FOLDER: release/wwwroot
-
-            # changes the base-tag in index.html from '/' to 'TeamVote' to match GitHub Pages repository subdirectory
-            - name: Change base-tag in index.html from / to TeamVote
-              run: sed -i 's/<base href="\/" \/>/<base href="\/TeamVote\/" \/>/g' release/wwwroot/index.html
                   
 # Based on https://swimburger.net/blog/dotnet/how-to-deploy-aspnet-blazor-webassembly-to-github-pages
