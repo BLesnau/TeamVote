@@ -1,0 +1,35 @@
+﻿@page "/teamvote"
+@using TeamVoteCommon;
+
+<PageTitle>TeamVote</PageTitle>
+
+<h1>TeamVote</h1>
+
+<p role="status">TeamVote Demo</p>
+
+<ul>
+	@foreach ( var vote in _votes )
+	{
+	   <li>
+		  <label>@vote.UserId</label>
+		  <label>@vote.VoteValue</label>
+	   </li>
+	}
+</ul>
+
+<input placeholder="Something todo" @bind="_newTodo" />
+<button @onclick="AddTodo">Add todo</button>
+
+@code {
+	private List<VoteData> _votes = new();
+	private string? _newTodo;
+
+	private void AddTodo()
+	{
+		if ( !string.IsNullOrWhiteSpace( _newTodo ) )
+		{
+			_votes.Add( new VoteData { UserId = _newTodo, VoteValue = 5 } );
+			_newTodo = string.Empty;
+		}
+	}
+}
